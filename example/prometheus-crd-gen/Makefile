@@ -27,19 +27,19 @@ $(GOBIN)/prometheus-crd-gen: build
 install: $(GOBIN)/prometheus-crd-gen
 
 
-prometheus.crd.yaml: $(GOBIN)/prometheus-crd-gen
-	prometheus-crd-gen --kind=Prometheus --plural=prometheuses --apigroup=monitoring.coreos.com --labels generation-date="$(DATE)" --scope=Namespaced --version=v1 --spec-name=github.com/ant31/crd-validation/example/prometheus-crd-gen/v1.Prometheus > prometheus.crd.yaml
+generated-crd/prometheus.crd.yaml: $(GOBIN)/prometheus-crd-gen
+	prometheus-crd-gen --kind=Prometheus --plural=prometheuses --apigroup=monitoring.coreos.com --labels generation-date="$(DATE)" --scope=Namespaced --version=v1 --spec-name=github.com/ant31/crd-validation/example/prometheus-crd-gen/v1.Prometheus > generated-crd/prometheus.crd.yaml
 
-alertmanager.crd.yaml: $(GOBIN)/prometheus-crd-gen
-	prometheus-crd-gen --kind=Alertmanager --plural=alertmanagers --apigroup=monitoring.coreos.com --labels generation-date="$(DATE)" --scope=Namespaced --version=v1 --spec-name=github.com/ant31/crd-validation/example/prometheus-crd-gen/v1.Alertmanager > alertmanager.crd.yaml
+generated-crd/alertmanager.crd.yaml: $(GOBIN)/prometheus-crd-gen
+	prometheus-crd-gen --kind=Alertmanager --plural=alertmanagers --apigroup=monitoring.coreos.com --labels generation-date="$(DATE)" --scope=Namespaced --version=v1 --spec-name=github.com/ant31/crd-validation/example/prometheus-crd-gen/v1.Alertmanager > generated-crd/alertmanager.crd.yaml
 
-servicemonitor.crd.yaml: $(GOBIN)/prometheus-crd-gen
-	prometheus-crd-gen --kind=ServiceMonitor --plural=servicemonitors --apigroup=monitoring.coreos.com --labels generation-date="$(DATE)" --scope=Cluster --version=v1 --spec-name=github.com/ant31/crd-validation/example/prometheus-crd-gen/v1.ServiceMonitor > servicemonitor.crd.yaml
+generated-crd/servicemonitor.crd.yaml: $(GOBIN)/prometheus-crd-gen
+	prometheus-crd-gen --kind=ServiceMonitor --plural=servicemonitors --apigroup=monitoring.coreos.com --labels generation-date="$(DATE)" --scope=Cluster --version=v1 --spec-name=github.com/ant31/crd-validation/example/prometheus-crd-gen/v1.ServiceMonitor > generated-crd/servicemonitor.crd.yaml
 
-generate-crds: prometheus.crd.yaml alertmanager.crd.yaml servicemonitor.crd.yaml
+generate-crds: clean generated-crd/prometheus.crd.yaml generated-crd/alertmanager.crd.yaml generated-crd/servicemonitor.crd.yaml
 
 .PHONY: openapi-gen build all
 
 
 clean:
-	rm -rf prometheus.crd.yaml alertmanager.crd.yaml servicemonitor.crd.yaml
+	rm -rf generated-crd/*.yaml
