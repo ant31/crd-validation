@@ -98,7 +98,7 @@ func NewCustomResourceDefinition(config Config) *extensionsobj.CustomResourceDef
 		},
 	}
 
-	if config.SpecDefinitionName != "" {
+	if config.SpecDefinitionName != "" && config.EnableValidation == true {
 		crd.Spec.Validation = GetCustomResourceValidation(config.SpecDefinitionName, config.GetOpenAPIDefinitions)
 	}
 
@@ -123,13 +123,12 @@ func MarshallCrd(crd *extensionsobj.CustomResourceDefinition, outputFormat strin
 	}
 }
 
-/*
- $ crd-validation-gen --kind Foo --plural foos --single foo --api-group monitoring.coreos.com --labels a=b,c=d --annotations a=b,c=d --spec	github.com/v1.AlertSpec
-*/
+// InitFlags prepares command line flags parser
 func InitFlags(cfg *Config) {
 	flagset := flag.NewFlagSet(os.Args[0], flag.ExitOnError)
 	flagset.Var(&cfg.Labels, "labels", "Labels")
 	flagset.Var(&cfg.Annotations, "annotations", "Annotations")
+	flagset.BoolVar(&cfg.EnableValidation, "with-validation", true, "Add CRD validation field, default: true")
 	flagset.StringVar(&cfg.Group, "apigroup", "custom.example.com", "CRD api group")
 	flagset.StringVar(&cfg.SpecDefinitionName, "spec-name", "", "CRD spec definition name")
 	flagset.StringVar(&cfg.OutputFormat, "output", "yaml", "output format: json|yaml")
