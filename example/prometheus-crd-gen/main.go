@@ -25,7 +25,9 @@ var (
 )
 
 func init() {
-	crdutils.InitFlags(&cfg)
+	flagset := flag.NewFlagSet(os.Args[0], flag.ExitOnError)
+	flagset := crdutils.InitFlags(&cfg, flagset)
+	flagset.Parse(os.Args[1:])
 }
 
 func main() {

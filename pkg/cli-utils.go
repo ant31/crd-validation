@@ -124,8 +124,7 @@ func MarshallCrd(crd *extensionsobj.CustomResourceDefinition, outputFormat strin
 }
 
 // InitFlags prepares command line flags parser
-func InitFlags(cfg *Config) {
-	flagset := flag.NewFlagSet(os.Args[0], flag.ExitOnError)
+func InitFlags(cfg *Config, flagset *flag.FlagSet) *flag.FlagSet {
 	flagset.Var(&cfg.Labels, "labels", "Labels")
 	flagset.Var(&cfg.Annotations, "annotations", "Annotations")
 	flagset.BoolVar(&cfg.EnableValidation, "with-validation", true, "Add CRD validation field, default: true")
@@ -136,5 +135,5 @@ func InitFlags(cfg *Config) {
 	flagset.StringVar(&cfg.ResourceScope, "scope", string(extensionsobj.NamespaceScoped), "CRD scope: 'Namespaced' | 'Cluster'.  Default: Namespaced")
 	flagset.StringVar(&cfg.Version, "version", "v1", "CRD version, default: 'v1'")
 	flagset.StringVar(&cfg.Plural, "plural", "", "CRD plural name")
-	flagset.Parse(os.Args[1:])
+	return flagset
 }
