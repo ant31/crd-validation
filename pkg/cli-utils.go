@@ -18,11 +18,12 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"os"
+	"strings"
+
 	"github.com/ghodss/yaml"
 	extensionsobj "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"os"
-	"strings"
 )
 
 // Config stores the user configuration input
@@ -37,6 +38,7 @@ type Config struct {
 	Kind                  string
 	Version               string
 	Plural                string
+	Categories            []string
 	GetOpenAPIDefinitions GetAPIDefinitions
 }
 
@@ -92,8 +94,9 @@ func NewCustomResourceDefinition(config Config) *extensionsobj.CustomResourceDef
 			Version: config.Version,
 			Scope:   extensionsobj.ResourceScope(config.ResourceScope),
 			Names: extensionsobj.CustomResourceDefinitionNames{
-				Plural: config.Plural,
-				Kind:   config.Kind,
+				Plural:     config.Plural,
+				Kind:       config.Kind,
+				Categories: config.Categories,
 			},
 		},
 	}
