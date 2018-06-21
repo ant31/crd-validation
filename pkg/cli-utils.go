@@ -39,6 +39,7 @@ type Config struct {
 	Version               string
 	Plural                string
 	Categories            []string
+	ShortNames            []string
 	GetOpenAPIDefinitions GetAPIDefinitions
 }
 
@@ -97,6 +98,7 @@ func NewCustomResourceDefinition(config Config) *extensionsobj.CustomResourceDef
 				Plural:     config.Plural,
 				Kind:       config.Kind,
 				Categories: config.Categories,
+				ShortNames: config.ShortNames,
 			},
 		},
 	}
