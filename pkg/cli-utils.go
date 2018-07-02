@@ -17,13 +17,13 @@ package crdvalidation
 import (
 	"encoding/json"
 	"flag"
-	"fmt"
 	"os"
 	"strings"
 
 	"github.com/ghodss/yaml"
 	extensionsobj "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 )
 
 // Config stores the user configuration input
@@ -110,22 +110,47 @@ func NewCustomResourceDefinition(config Config) *extensionsobj.CustomResourceDef
 	return crd
 }
 
-func MarshallCrd(crd *extensionsobj.CustomResourceDefinition, outputFormat string) {
-	jsonBytes, err := json.MarshalIndent(crd, "", "    ")
+func MarshallCrd(crd *extensionsobj.CustomResourceDefinition, outputFormat string) error {
+	jsonBytes, err := json.Marshal(crd)
 	if err != nil {
-		fmt.Println("error:", err)
+		return err
+	}
+
+	var r unstructured.Unstructured
+	if err := json.Unmarshal(jsonBytes, &r.Object); err != nil {
+		return err
+	}
+
+	unstructured.RemoveNestedField(r.Object, "status")
+
+	jsonBytes, err = json.MarshalIndent(r.Object, "", "    ")
+	if err != nil {
+		return err
 	}
 
 	if outputFormat == "json" {
-		os.Stdout.Write(jsonBytes)
+		_, err = os.Stdout.Write(jsonBytes)
+		if err != nil {
+			return err
+		}
 	} else {
 		yamlBytes, err := yaml.JSONToYAML(jsonBytes)
 		if err != nil {
-			fmt.Println("error:", err)
+			return err
 		}
-		os.Stdout.Write([]byte("---\n"))
-		os.Stdout.Write(yamlBytes)
+
+		_, err = os.Stdout.Write([]byte("---\n"))
+		if err != nil {
+			return err
+		}
+
+		_, err = os.Stdout.Write(yamlBytes)
+		if err != nil {
+			return err
+		}
 	}
+
+	return nil
 }
 
 // InitFlags prepares command line flags parser
