@@ -83,6 +83,9 @@ func (labels *Labels) Set(value string) error {
 }
 
 func NewCustomResourceDefinition(config Config) *extensionsobj.CustomResourceDefinition {
+
+        labelSelectorPath := ".status.labelSelector"
+
 	crd := &extensionsobj.CustomResourceDefinition{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:        config.Plural + "." + config.Group,
@@ -99,6 +102,15 @@ func NewCustomResourceDefinition(config Config) *extensionsobj.CustomResourceDef
 				Kind:       config.Kind,
 				Categories: config.Categories,
 				ShortNames: config.ShortNames,
+			},
+			Subresources: &extensionsobj.CustomResourceSubresources{
+				Status: &extensionsobj.CustomResourceSubresourceStatus {
+				},
+				Scale: &extensionsobj.CustomResourceSubresourceScale {
+					SpecReplicasPath:	".spec.replicas",
+					StatusReplicasPath:	".status.replicas",
+					LabelSelectorPath:	&labelSelectorPath,
+				},
 			},
 		},
 	}
