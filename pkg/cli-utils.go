@@ -178,8 +178,8 @@ func InitFlags(cfg *Config, flagset *flag.FlagSet) *flag.FlagSet {
 	flagset.StringVar(&cfg.ResourceScope, "scope", string(extensionsobj.NamespaceScoped), "CRD scope: 'Namespaced' | 'Cluster'.  Default: Namespaced")
 	flagset.StringVar(&cfg.Version, "version", "v1", "CRD version, default: 'v1'")
 	flagset.StringVar(&cfg.Plural, "plural", "", "CRD plural name")
-	flagset.StringVar(&cfg.SpecReplicasPath, "spec-replicas-path", "", "CRD spec replicas path")
-	flagset.StringVar(&cfg.StatusReplicasPath, "status-replicas-path", "", "CRD status replicas path")
-	flagset.StringVar(&cfg.LabelSelectorPath, "label-selector-path", "", "CRD label selector path")
+	flagset.StringVar(&cfg.SpecReplicasPath, "spec-replicas-path", ".spec.replicas", "CRD spec replicas path")
+	flagset.StringVar(&cfg.StatusReplicasPath, "status-replicas-path", ".status.replicas", "CRD status replicas path")
+	flagset.StringVar(&cfg.LabelSelectorPath, "label-selector-path", ".status.labelSelector", "CRD label selector path")
 	return flagset
 }
