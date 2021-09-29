@@ -8,9 +8,9 @@ DATE := $(shell date '+%Y-%m-%d %H:%M:%S')
 all: generate-crds
 
 $(GOBIN)/openapi-gen:
-	go get -u -v -d k8s.io/code-generator/cmd/openapi-gen
-	cd $(GOPATH)/src/k8s.io/code-generator; git checkout release-1.8
-	go install k8s.io/code-generator/cmd/openapi-gen
+	go get -u -v -d k8s.io/kube-openapi /cmd/openapi-gen
+	cd $(GOPATH)/src/k8s.io/kube-openapi ; git checkout release-1.8
+	go install k8s.io/kube-openapi /cmd/openapi-gen
 
 
 

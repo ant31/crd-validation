@@ -5,10 +5,11 @@ import (
 	"fmt"
 	"os"
 
+	"testing"
+
 	spec "github.com/go-openapi/spec"
 	extensionsobj "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 	common "k8s.io/kube-openapi/pkg/common"
-	"testing"
 )
 
 func TestConvertSchematoJsonProp(t *testing.T) {
@@ -27,7 +28,7 @@ func TestConvertSchematoJsonProp(t *testing.T) {
 		Ref:         ref,
 	}
 	var def map[string]common.OpenAPIDefinition
-	props := SchemaPropsToJsonProps(&schema, def, false)
+	props := SchemaPropsToJSONProps(&schema, def, false)
 
 	if props.Description != expected.Description {
 		t.Errorf("Description: expected %s, got %s", schema.Description, expected.Description)
@@ -72,7 +73,7 @@ func TestConvertFullSchematoJsonProp(t *testing.T) {
 	},
 	}
 	var def map[string]common.OpenAPIDefinition
-	props := SchemaPropsToJsonProps(&schema, def, false)
+	props := SchemaPropsToJSONProps(&schema, def, false)
 	jsonBytes, err := json.MarshalIndent(props, "", "  ")
 	if err != nil {
 		fmt.Println("error:", err)
