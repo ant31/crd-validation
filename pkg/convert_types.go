@@ -2,9 +2,10 @@ package crdvalidation
 
 import (
 	"fmt"
-	spec "github.com/go-openapi/spec"
+
 	extensionsobj "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 	common "k8s.io/kube-openapi/pkg/common"
+	spec "k8s.io/kube-openapi/pkg/validation/spec"
 )
 
 // SchemaPropsToJSONPropsArray converts []Schema to []JSONSchemaProps
