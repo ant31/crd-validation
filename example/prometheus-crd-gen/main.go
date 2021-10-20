@@ -15,9 +15,11 @@
 package main
 
 import (
+	"flag"
+	"os"
+
 	v1 "github.com/ant31/crd-validation/example/prometheus-crd-gen/v1"
 	crdutils "github.com/ant31/crd-validation/pkg"
-	"os"
 )
 
 var (
@@ -26,7 +28,7 @@ var (
 
 func init() {
 	flagset := flag.NewFlagSet(os.Args[0], flag.ExitOnError)
-	flagset := crdutils.InitFlags(&cfg, flagset)
+	flagset = crdutils.InitFlags(&cfg, flagset)
 	flagset.Parse(os.Args[1:])
 }
 
